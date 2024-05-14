@@ -1,0 +1,167 @@
+
+<!-- Search  -->
+<div class="mt-5 grid place-items-center">
+  <form class="sm:w-72 md:w-96">
+    <label for="searchBar" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+    <div class="relative">
+      <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+          fill="none" viewBox="0 0 20 20">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+        </svg>
+      </div>
+
+      <!-- SearchBar  -->
+      <input type="search" id="searchBar"
+        class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Enter github username" required [formControl]="searchBar" />
+      <button [routerLink]="['/user', searchBar.value]" type="submit" [disabled]="
+          !searchBar.value ||
+          searchBar.value.length === 0 ||
+          searchBar.value == currentUrl.split('/')[2]
+        "
+        class="disabled:bg-blue-600/30 text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        Search
+      </button>
+    </div>
+  </form>
+  <p class="text-red-500  mt-10 pt-10 absolute text-base" *ngIf="errorMessage && errorMessage.length !== 0">
+    {{ errorMessage }}
+  </p>
+</div>
+
+
+
+<div *ngIf="errorMessage == ''">
+  <div class="rounded-md p-4 px-10 py-5 w-full h-full mx-auto" *ngIf="!userData || loading === true">
+    <div class="animate-pulse flex space-x-4">
+      <div class="rounded-full bg-slate-400/50 h-60 w-60"></div>
+      <div class="flex-1 space-y-6 py-1">
+        <div class="space-y-3">
+          <div class="grid grid-cols-3 gap-10">
+            <div class="h-20 bg-slate-400/50 rounded col-span-2"></div>
+            <div class="h-10 bg-slate-400/50 rounded col-span-2"></div>
+            <div class="h-10 bg-slate-400/50 rounded col-span-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+
+    <!-- Username  -->
+    <div *ngIf="userData && loading === false">
+      <div class="md:flex md:flex-row py-5 px-10 sm:flex sm:flex-col">
+        <img class="sm:w-96 md:w-60 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500 sm:mb-8" *ngIf="userData"
+          [src]="userData.avatar_url" alt="Profile Picture" />
+        <div class="flex flex-col px-10 mt-5">
+          <p class="text-4xl font-semibold " *ngIf="userData && userData.name">
+            {{ userData.name }}
+          </p>
+          <p class="text-4xl" *ngIf="!userData"></p>
+
+          <p class="text-base py-1 pt-3 pd-3 font-semibold" *ngIf="userData">
+            {{ userData.bio ? userData.bio : "" }}
+          </p>
+          <p class="text-base py-1" *ngIf="!userData"></p>
+
+
+          <p class="text-base py-1 font-semibold" *ngIf="userData">
+            {{ userData.location ? userData.location : "" }}
+          </p>
+          <p class="text-base py-1" *ngIf="!userData"></p>
+          <a class="text-base py-1 font-semibold" [href]="twitterUrl" *ngIf="userData">
+            <span>{{ twitterUrl ? "Twitter: " : "" }}</span>
+            <span class="decoration-solid font-semibold" *ngIf="userData">
+              {{ twitterUrl ? twitterUrl : "" }}
+            </span>
+          </a>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Github  -->
+    <ng-container *ngIf="userData; else noUserData">
+      <a target="_blank" [href]="userData.html_url" class="underline decoration-solid flex pl-12">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-4 h-6 md:mr-1 font-semibold">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+        </svg>
+        {{ userData.html_url }}
+      </a>
+    </ng-container>
+    <ng-template #noUserData>
+      <!-- You can add a message or alternative content here when userData is not present -->
+      <span>User GitHub information not available.</span>
+    </ng-template>
+
+
+    <div class="px-10 mx-autogrid grid-rows-3 gap-10 mt-10 animate-pulse"
+      *ngIf="!userData || loading === true || loadingRepositories == true">
+      <div class="flex flex-cols-2 w-full gap-4 mb-4">
+        <div class="w-1/2 h-44 bg-slate-400/50"></div>
+        <div class="w-1/2 h-44 bg-slate-400/50"></div>
+      </div>
+      <div class="flex flex-cols-2 w-full gap-4 mb-4">
+        <div class="w-1/2 h-44 bg-slate-400/50"></div>
+        <div class="w-1/2 h-44 bg-slate-400/50"></div>
+      </div>
+      <div class="flex flex-cols-2 w-full gap-4">
+        <div class="w-1/2 h-44 bg-slate-400/50"></div>
+        <div class="w-1/2 h-44 bg-slate-400/50"></div>
+      </div>
+    </div>
+
+
+    <!-- RepoList -->
+    
+    <div class="md:grid md:grid-cols-2 gap-x-24 gap-y-10 w-[100%] ml-1 mt-10 px-10 ;sm:grid sm:grid-cols-1"
+      *ngIf="userData && loading === false && loadingRepositories == false">
+      
+      <div *ngIf="repoData.length === 0">No repositories found!</div>
+      <div *ngFor="let currentRepository of repoData ">
+        <div class="md:h-44 border-solid border-2 border-black/50 p-5">
+          <a [href]="currentRepository.url" target="_blank"
+            class="font-bold text-3xl text-blue-500 hover:text-blue-700 hover:opacity-90 flex">
+
+            <!-- <svg
+              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="#428bca" 
+              stroke="currentColor" class="w-4 h-10 mr-1">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+            </svg> -->
+            {{ currentRepository.repoName }}</a>
+          <h5 class="text-sm mt-3 mb-3 font-semibold ">
+            {{
+            currentRepository.description
+            ? currentRepository.description
+            : "No description"
+            }}
+          </h5>
+          <div class="sm:flex sm:flex-cols md:grid md:grid-flow-row-dense grid-cols-4">
+            <div *ngFor="let topic of currentRepository.topics; let i=index">
+              <ng-container *ngIf="i < 4">
+                <div class="mt-1 mr-2 p-1.5 rounded-md text-center bg-blue-700/80 text-lg ">
+                  {{ topic.slice(0, 11) }}.
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          
+          
+          
+          
+          
+
+        </div>
+      </div>
+    </div>
+
+    <app-pagination *ngIf="repoData.length !== 0" [totalPages]="totalPages" [totalItems]="totalItems"
+      (newItemEvent)="changePage($event)" (newItemEvent2)="changeItemsPerPage($event)"></app-pagination>
+  </div>
+</div>

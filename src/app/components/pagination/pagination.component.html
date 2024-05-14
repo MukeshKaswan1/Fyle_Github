@@ -1,0 +1,125 @@
+<div class="flex items-center justify-between px-10 py-10">
+  <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+    <div>
+      <p class="text-sm text-gray-700">
+        Showing
+        <span class="font-medium">{{
+          itemsPerPage * (currentPage - 1) + 1
+          }}</span>
+        to
+        <span class="font-medium">{{
+          currentPage === totalPages ? totalItems : itemsPerPage * currentPage
+          }}</span>
+        of
+        <span class="font-medium">{{ totalItems }}</span>
+        results
+      </p>
+    </div>
+  </div>
+  <div class="flex items-center space-x-4">
+    <div class="ml-10 relative">
+      <button id="dropdownInformationButton" (click)="toggleDropdown()"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        type="button">
+        Page Size: {{ itemsPerPage }}
+        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+        </svg>
+      </button>
+    
+      <div id="dropdownInformation" [class]="
+          dropdownVisible
+            ? 'z-50 absolute bottom-full bg-white divide-y divide-gray-100 rounded-lg shadow w-20 dark:bg-gray-700 dark:divide-gray-600'
+            : 'hidden'
+        " aria-labelledby="dropdownInformationButton">
+        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+          <li>
+            <div class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+              (click)="changeItems(10); itemsPerPage = 10; currentPage = 1">
+              10
+            </div>
+          </li>
+          <li>
+            <div class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+              (click)="changeItems(25); itemsPerPage = 25; currentPage = 1">
+              25
+            </div>
+          </li>
+          <li>
+            <div class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+              (click)="changeItems(50); itemsPerPage = 50; currentPage = 1">
+              50
+            </div>
+          </li>
+          <li>
+            <div class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+              (click)="changeItems(100); itemsPerPage = 100; currentPage = 1">
+              100
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+        <a class="relative cursor-pointer inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+          (click)="
+            this.currentPage =
+              this.currentPage === 1 ? 1 : this.currentPage - 1;
+            changePage(this.currentPage)
+          ">
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+              clip-rule="evenodd" />
+          </svg>
+        </a>
+        <span *ngFor="let page of pages" [class]="
+            'relative cursor-pointer hidden items-center px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300  focus:z-20 focus:outline-offset-0 md:inline-flex' +
+            (currentPage === page + 1
+              ? ' bg-blue-700 text-white'
+              : ' bg-white-400 hover:bg-gray-100')
+          " (click)="this.currentPage = page + 1; changePage(this.currentPage)">{{ page + 1 }}</span>
+        <span
+          class="relative cursor-pointer inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+          (click)="
+            this.currentPage =
+              this.currentPage === this.totalPages
+                ? this.currentPage
+                : this.currentPage + 1;
+            changePage(this.currentPage)
+          ">
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" s aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+              clip-rule="evenodd" />
+          </svg>
+        </span>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<div class="sm:not-sr-only md:sr-only flex justify-between w-full px-10 place-items-center">
+  <button
+    class="cursor-pointer inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+    (click)="
+      this.currentPage =
+        this.currentPage === 1 ? this.currentPage : this.currentPage - 1;
+      changePage(this.currentPage)
+    ">
+    Previous
+  </button>
+  <button
+    class="relative cursor-pointer inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+    (click)="
+      this.currentPage =
+        this.currentPage === this.totalPages
+          ? this.currentPage
+          : this.currentPage + 1;
+      changePage(this.currentPage)
+    ">
+    Next
+  </button>
+</div>
