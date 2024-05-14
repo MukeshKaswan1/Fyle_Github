@@ -67,7 +67,17 @@
           <p class="text-base py-1" *ngIf="!userData"></p>
 
 
-          <p class="text-base py-1 font-semibold" *ngIf="userData">
+          <p class="flex gap-x-2 py-1 font-semibold" *ngIf="userData">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="25" height="25" viewBox="0 0 256 256" xml:space="preserve">
+
+              <defs>
+              </defs>
+              <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
+                <path d="M 45 90 c -1.415 0 -2.725 -0.748 -3.444 -1.966 l -4.385 -7.417 C 28.167 65.396 19.664 51.02 16.759 45.189 c -2.112 -4.331 -3.175 -8.955 -3.175 -13.773 C 13.584 14.093 27.677 0 45 0 c 17.323 0 31.416 14.093 31.416 31.416 c 0 4.815 -1.063 9.438 -3.157 13.741 c -0.025 0.052 -0.053 0.104 -0.08 0.155 c -2.961 5.909 -11.41 20.193 -20.353 35.309 l -4.382 7.413 C 47.725 89.252 46.415 90 45 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0, 0, 0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                <path d="M 45 45.678 c -8.474 0 -15.369 -6.894 -15.369 -15.368 S 36.526 14.941 45 14.941 c 8.474 0 15.368 6.895 15.368 15.369 S 53.474 45.678 45 45.678 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+              </g>
+              </svg>
+                       
             {{ userData.location ? userData.location : "" }}
           </p>
           <p class="text-base py-1" *ngIf="!userData"></p>
@@ -84,12 +94,13 @@
 
     <!-- Github  -->
     <ng-container *ngIf="userData; else noUserData">
-      <a target="_blank" [href]="userData.html_url" class="underline decoration-solid flex pl-12">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+      <a target="_blank" [href]="userData.html_url" class="font-semibold flex pl-12">
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="w-4 h-6 md:mr-1 font-semibold">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
-        </svg>
+        </svg>         -->
+        <img src="../../../assets/link.svg" alt="link" class="w-5 h-6 md:mr-1 font-semibold pt-[2px] ">        
         {{ userData.html_url }}
       </a>
     </ng-container>
@@ -126,14 +137,6 @@
         <div class="md:h-44 border-solid border-2 border-black/50 p-5">
           <a [href]="currentRepository.url" target="_blank"
             class="font-bold text-3xl text-blue-500 hover:text-blue-700 hover:opacity-90 flex">
-
-            <!-- <svg
-              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="#428bca" 
-              stroke="currentColor" class="w-4 h-10 mr-1">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
-            </svg> -->
             {{ currentRepository.repoName }}</a>
           <h5 class="text-sm mt-3 mb-3 font-semibold ">
             {{
@@ -145,7 +148,7 @@
           <div class="sm:flex sm:flex-cols md:grid md:grid-flow-row-dense grid-cols-4">
             <div *ngFor="let topic of currentRepository.topics; let i=index">
               <ng-container *ngIf="i < 4">
-                <div class="mt-1 mr-2 p-1.5 rounded-md text-center bg-blue-700/80 text-lg ">
+                <div class="mt-1 mr-2 p-1.5 rounded-md text-center bg-blue-700/80 text-lg text-white">
                   {{ topic.slice(0, 11) }}.
                 </div>
               </ng-container>
